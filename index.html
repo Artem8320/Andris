@@ -38,19 +38,7 @@
     ::-webkit-scrollbar-thumb { background: var(--stone); border-radius: 2px; }
 
     /* ─── CURSOR ─── */
-    .custom-cursor {
-      width: 8px; height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease;
-    }
-    .custom-cursor.grow {
-      transform: translate(-50%, -50%) scale(5);
-      opacity: 0.3;
-    }
+    .custom-cursor { display: none; }
 
     /* ─── NAV ─── */
     #mainNav {
@@ -501,6 +489,173 @@
       letter-spacing: 0.5px;
     }
 
+    /* ─── AMENITIES CARDS ─── */
+    .amenities-cards {
+      padding: 0 6% 60px;
+    }
+
+    .amenities-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .amenity-card {
+      border: 1px solid rgba(201,191,176,0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.4s ease;
+    }
+
+    .amenity-card.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .amenity-card:hover {
+      box-shadow: 0 16px 48px rgba(26,24,20,0.1);
+    }
+
+    /* Слайдер */
+    .amenity-slider {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .amenity-slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .amenity-slides img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(26,24,20,0.45);
+      color: #fff;
+      border: none;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s;
+      z-index: 2;
+      line-height: 1;
+    }
+
+    .slider-btn:hover { background: var(--accent); }
+    .slider-prev { left: 12px; }
+    .slider-next { right: 12px; }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 10px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 6px;
+      z-index: 2;
+    }
+
+    .slider-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .slider-dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    .amenity-card-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .amenity-card-body {
+      padding: 28px 32px 32px;
+    }
+
+    .amenity-card-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--stone);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .amenity-card-icon svg {
+      width: 18px; height: 18px;
+      stroke: var(--accent);
+    }
+
+    .amenity-card-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .amenity-card-body p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .amenity-card-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+    }
+
+    .amenity-card-list li {
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .amenity-card-list li::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .amenities-cards { padding: 0 4% 48px; }
+      .amenities-cards-grid { grid-template-columns: 1fr; }
+      .amenity-card-body { padding: 20px 24px 24px; }
+    }
+
     /* ─── ROOMS ─── */
     .rooms {
       padding: 60px 6%;
@@ -530,11 +685,11 @@
 
     .room-gallery {
       position: relative; overflow: hidden;
+      aspect-ratio: 4/3;
     }
 
     .room-main-img {
       width: 100%; height: 100%;
-      min-height: 380px;
       object-fit: cover; display: block;
       transition: transform 0.8s ease;
     }
@@ -709,20 +864,20 @@
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 240px);
       gap: 3px;
     }
 
     .gallery-item {
       overflow: hidden; position: relative;
       cursor: pointer;
+      aspect-ratio: 4/3;
       opacity: 0;
       transform: scale(0.97);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
     .gallery-item.visible { opacity: 1; transform: scale(1); }
-    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .gallery-item:nth-child(1) { grid-column: span 2; aspect-ratio: 8/6; }
 
     .gallery-item img {
       width: 100%; height: 100%; object-fit: cover;
@@ -1012,6 +1167,7 @@
 
     @media (max-width: 900px) {
       #mainNav { display: none; }
+      .custom-cursor { display: none; }
       .nav-links { display: none; }
       .nav-phone { display: none; }
       .burger { display: none; }
@@ -1030,7 +1186,6 @@
 
       .room-card { grid-template-columns: 1fr; }
       .room-card.reverse { direction: ltr; }
-      .room-main-img { min-height: 260px; }
       .room-info { padding: 32px 24px; }
 
       .contacts-grid { grid-template-columns: 1fr; }
@@ -1244,6 +1399,71 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ─── AMENITIES CARDS ─── -->
+<section class="amenities-cards">
+  <div class="amenities-cards-grid">
+
+    <!-- Бассейн -->
+    <div class="amenity-card reveal">
+      <div class="amenity-slider">
+        <div class="amenity-slides">
+          <img src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?auto=format&fit=crop&w=900&q=80" alt="Бассейн">
+          <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=900&q=80" alt="Бассейн">
+          <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&w=900&q=80" alt="Бассейн">
+          <img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=900&q=80" alt="Бассейн">
+        </div>
+        <button class="slider-btn slider-prev" onclick="slideMove(this,-1)">&#8592;</button>
+        <button class="slider-btn slider-next" onclick="slideMove(this,1)">&#8594;</button>
+        <div class="slider-dots"></div>
+        <div class="amenity-card-badge">Открытый бассейн</div>
+      </div>
+      <div class="amenity-card-body">
+        <div class="amenity-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12h20M2 12c0 5.523 4.477 10 10 10S22 17.523 22 12M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10M7 12c0-1.5.5-4 5-4s5 2.5 5 4"/></svg>
+        </div>
+        <h3>Бассейн</h3>
+        <p>Просторный открытый бассейн с шезлонгами и зоной отдыха. Идеально для жаркого черноморского дня.</p>
+        <ul class="amenity-card-list">
+          <li>Шезлонги и зонты</li>
+          <li>Детская зона</li>
+          <li>Душ на выходе</li>
+          <li>Открыт с 8:00 до 22:00</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Столовая -->
+    <div class="amenity-card reveal" style="transition-delay:0.15s">
+      <div class="amenity-slider">
+        <div class="amenity-slides">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80" alt="Кухня">
+          <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?auto=format&fit=crop&w=900&q=80" alt="Столовая">
+          <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=900&q=80" alt="Столовая">
+          <img src="https://images.unsplash.com/photo-1565538810643-b5bdb714032a?auto=format&fit=crop&w=900&q=80" alt="Кухня">
+        </div>
+        <button class="slider-btn slider-prev" onclick="slideMove(this,-1)">&#8592;</button>
+        <button class="slider-btn slider-next" onclick="slideMove(this,1)">&#8594;</button>
+        <div class="slider-dots"></div>
+        <div class="amenity-card-badge">Самообслуживание</div>
+      </div>
+      <div class="amenity-card-body">
+        <div class="amenity-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6h3.5a1.5 1.5 0 0 1 0 3H14v4"/></svg>
+        </div>
+        <h3>Столовая и кухня</h3>
+        <p>Общая кухня со всем необходимым — готовьте сами или завтракайте в уютной столовой. Весь комфорт дома у моря.</p>
+        <ul class="amenity-card-list">
+          <li>Плита, духовка, микроволновка</li>
+          <li>Холодильник и посуда</li>
+          <li>Столовая на 20 человек</li>
+          <li>Зона барбекю во дворе</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1574,17 +1794,6 @@
 <a href="https://wa.me/79991234567" class="mobile-booking-btn">Забронировать</a>
 
 <script>
-  // ─── Cursor
-  const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
-  });
-
   // ─── Nav scroll
   const nav = document.getElementById('mainNav');
   window.addEventListener('scroll', () => {
@@ -1652,7 +1861,41 @@
     window.open(`https://andris-hotel.bnovo.ru/booking/?dfrom=${dfrom}&dto=${dto}&adults=${guests}`, '_blank');
   });
 
-  // Set min date on inputs
+  // ─── Amenity sliders
+  document.querySelectorAll('.amenity-slider').forEach(slider => {
+    const slides = slider.querySelector('.amenity-slides');
+    const imgs = slides.querySelectorAll('img');
+    const dotsWrap = slider.querySelector('.slider-dots');
+    let current = 0;
+
+    // создаём точки
+    imgs.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+
+    function goTo(n) {
+      current = (n + imgs.length) % imgs.length;
+      slides.style.transform = `translateX(-${current * 100}%)`;
+      dotsWrap.querySelectorAll('.slider-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === current));
+    }
+
+    slider.querySelector('.slider-prev').addEventListener('click', () => goTo(current - 1));
+    slider.querySelector('.slider-next').addEventListener('click', () => goTo(current + 1));
+
+    // свайп на мобильном
+    let startX = 0;
+    slides.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
+    slides.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    }, {passive:true});
+  });
+
+
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('checkin').min = today;
   document.getElementById('checkout').min = today;
